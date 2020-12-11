@@ -4,7 +4,7 @@ export type State = {
   pressure: number;
 };
 
-export const makeState = () => {
+export const makeState = (onStateChange: (state: State) => void) => {
   let state: State = {
     x: 0,
     y: 0,
@@ -14,6 +14,7 @@ export const makeState = () => {
     getState: () => state,
     setState: (newState: Partial<State>) => {
       state = { ...state, ...newState };
+      onStateChange(state);
     },
   };
 };

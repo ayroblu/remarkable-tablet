@@ -31,6 +31,10 @@
           {
             "pattern": "@hlsp/**",
             "group": "internal"
+          },
+          {
+            "pattern": "./*",
+            "group": "internal"
           }
         ],
         "pathGroupsExcludedImportTypes": ["builtin"],

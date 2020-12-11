@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
-import { makeState } from "state";
-import { bufferedGet, printToConsole } from "utils";
+
+import { makeState } from "./state";
+import { bufferedGet, printToConsole } from "./utils";
 
 export function checkRemarkable(rmHost: string) {
   try {
@@ -28,7 +29,7 @@ export const handleChunkStateful = (state: ReturnType<typeof makeState>) => (
   // const a = chunk.slice(4, 8);
   const b = chunk.slice(8, 12);
   const c = chunk.slice(12, 16);
-  const typ = b[0];
+  const [typ] = b;
   const code = bufferedGet(b, 2) + bufferedGet(b, 3) * 0x100;
   const val =
     bufferedGet(c, 0) +
@@ -36,13 +37,10 @@ export const handleChunkStateful = (state: ReturnType<typeof makeState>) => (
     bufferedGet(c, 2) * 0x10_000 +
     bufferedGet(c, 3) * 0x1000_000;
   if (typ === 3) {
-    if (code === 0) {
-      state.setState({ x: val });
-    } else if (code === 1) {
-      state.setState({ y: val });
-    } else if (code === 24) {
-      state.setState({ pressure: val });
-    }
+    if (code === 0) state.setState({ x: val });
+    else if (code === 1) state.setState({ y: val });
+    else if (code === 24) state.setState({ pressure: val });
+
     const { x, y, pressure } = state.getState();
     printToConsole(`x = ${x}, y = ${y}, pressure = ${pressure}`);
     // x = 20966, y = 15725, pressure = 4095
